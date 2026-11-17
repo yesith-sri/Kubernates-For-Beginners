@@ -1,0 +1,93 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1000" height="132" viewBox="0 0 1000 132" role="img" aria-labelledby="title description">
+  <title id="title">Animated 41-day Kubernetes learning roadmap</title>
+  <desc id="description">A continuous animated ticker showing every lesson from Day 01 through Day 41.</desc>
+
+  <defs>
+    <linearGradient id="background" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#071426"/>
+      <stop offset="0.52" stop-color="#0b2447"/>
+      <stop offset="1" stop-color="#101b36"/>
+    </linearGradient>
+    <linearGradient id="card" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#183b68"/>
+      <stop offset="1" stop-color="#102c52"/>
+    </linearGradient>
+    <linearGradient id="fade-left" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#071426" stop-opacity="1"/>
+      <stop offset="1" stop-color="#071426" stop-opacity="0"/>
+    </linearGradient>
+    <linearGradient id="fade-right" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#101b36" stop-opacity="0"/>
+      <stop offset="1" stop-color="#101b36" stop-opacity="1"/>
+    </linearGradient>
+    <filter id="glow" x="-30%" y="-30%" width="160%" height="160%">
+      <feGaussianBlur stdDeviation="3" result="blur"/>
+      <feMerge>
+        <feMergeNode in="blur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+
+    <g id="track" font-family="Segoe UI, Arial, sans-serif">
+      <g transform="translate(0 0)"><rect width="222" height="68" rx="14" fill="url(#card)" stroke="#4f8fff"/><text x="16" y="27" fill="#7db4ff" font-size="13" font-weight="700">DAY 01</text><text x="16" y="51" fill="#fff" font-size="16" font-weight="600">Pods</text></g>
+      <g transform="translate(240 0)"><rect width="222" height="68" rx="14" fill="url(#card)" stroke="#4f8fff"/><text x="16" y="27" fill="#7db4ff" font-size="13" font-weight="700">DAY 02</text><text x="16" y="51" fill="#fff" font-size="16" font-weight="600">First Pod YAML</text></g>
+      <g transform="translate(480 0)"><rect width="222" height="68" rx="14" fill="url(#card)" stroke="#4f8fff"/><text x="16" y="27" fill="#7db4ff" font-size="13" font-weight="700">DAY 03</text><text x="16" y="51" fill="#fff" font-size="16" font-weight="600">Multi-container Pods</text></g>
+      <g transform="translate(720 0)"><rect width="222" height="68" rx="14" fill="url(#card)" stroke="#4f8fff"/><text x="16" y="27" fill="#7db4ff" font-size="13" font-weight="700">DAY 04</text><text x="16" y="51" fill="#fff" font-size="16" font-weight="600">Init Containers</text></g>
+      <g transform="translate(960 0)"><rect width="222" height="68" rx="14" fill="url(#card)" stroke="#4f8fff"/><text x="16" y="27" fill="#7db4ff" font-size="13" font-weight="700">DAY 05</text><text x="16" y="51" fill="#fff" font-size="16" font-weight="600">Sidecar Containers</text></g>
+      <g transform="translate(1200 0)"><rect width="222" height="68" rx="14" fill="url(#card)" stroke="#4f8fff"/><text x="16" y="27" fill="#7db4ff" font-size="13" font-weight="700">DAY 06</text><text x="16" y="51" fill="#fff" font-size="16" font-weight="600">ConfigMaps</text></g>
+      <g transform="translate(1440 0)"><rect width="222" height="68" rx="14" fill="url(#card)" stroke="#4f8fff"/><text x="16" y="27" fill="#7db4ff" font-size="13" font-weight="700">DAY 07</text><text x="16" y="51" fill="#fff" font-size="16" font-weight="600">Secrets</text></g>
+      <g transform="translate(1680 0)"><rect width="222" height="68" rx="14" fill="url(#card)" stroke="#4f8fff"/><text x="16" y="27" fill="#7db4ff" font-size="13" font-weight="700">DAY 08</text><text x="16" y="51" fill="#fff" font-size="16" font-weight="600">ConfigMap Injection</text></g>
+      <g transform="translate(1920 0)"><rect width="222" height="68" rx="14" fill="url(#card)" stroke="#4f8fff"/><text x="16" y="27" fill="#7db4ff" font-size="13" font-weight="700">DAY 09</text><text x="16" y="51" fill="#fff" font-size="16" font-weight="600">Requests &amp; Limits</text></g>
+      <g transform="translate(2160 0)"><rect width="222" height="68" rx="14" fill="url(#card)" stroke="#4f8fff"/><text x="16" y="27" fill="#7db4ff" font-size="13" font-weight="700">DAY 10</text><text x="16" y="51" fill="#fff" font-size="16" font-weight="600">Quotas</text></g>
+      <g transform="translate(2400 0)"><rect width="222" height="68" rx="14" fill="url(#card)" stroke="#4f8fff"/><text x="16" y="27" fill="#7db4ff" font-size="13" font-weight="700">DAY 11</text><text x="16" y="51" fill="#fff" font-size="16" font-weight="600">Deployments</text></g>
+      <g transform="translate(2640 0)"><rect width="222" height="68" rx="14" fill="url(#card)" stroke="#4f8fff"/><text x="16" y="27" fill="#7db4ff" font-size="13" font-weight="700">DAY 12</text><text x="16" y="51" fill="#fff" font-size="16" font-weight="600">Rolling Updates</text></g>
+      <g transform="translate(2880 0)"><rect width="222" height="68" rx="14" fill="url(#card)" stroke="#4f8fff"/><text x="16" y="27" fill="#7db4ff" font-size="13" font-weight="700">DAY 13</text><text x="16" y="51" fill="#fff" font-size="16" font-weight="600">Rollbacks</text></g>
+      <g transform="translate(3120 0)"><rect width="222" height="68" rx="14" fill="url(#card)" stroke="#4f8fff"/><text x="16" y="27" fill="#7db4ff" font-size="13" font-weight="700">DAY 14</text><text x="16" y="51" fill="#fff" font-size="16" font-weight="600">Blue-Green</text></g>
+      <g transform="translate(3360 0)"><rect width="222" height="68" rx="14" fill="url(#card)" stroke="#4f8fff"/><text x="16" y="27" fill="#7db4ff" font-size="13" font-weight="700">DAY 15</text><text x="16" y="51" fill="#fff" font-size="16" font-weight="600">Canary Deployments</text></g>
+      <g transform="translate(3600 0)"><rect width="222" height="68" rx="14" fill="url(#card)" stroke="#4f8fff"/><text x="16" y="27" fill="#7db4ff" font-size="13" font-weight="700">DAY 16</text><text x="16" y="51" fill="#fff" font-size="16" font-weight="600">Jobs</text></g>
+      <g transform="translate(3840 0)"><rect width="222" height="68" rx="14" fill="url(#card)" stroke="#4f8fff"/><text x="16" y="27" fill="#7db4ff" font-size="13" font-weight="700">DAY 17</text><text x="16" y="51" fill="#fff" font-size="16" font-weight="600">CronJobs</text></g>
+      <g transform="translate(4080 0)"><rect width="222" height="68" rx="14" fill="url(#card)" stroke="#4f8fff"/><text x="16" y="27" fill="#7db4ff" font-size="13" font-weight="700">DAY 18</text><text x="16" y="51" fill="#fff" font-size="16" font-weight="600">Node Affinity</text></g>
+      <g transform="translate(4320 0)"><rect width="222" height="68" rx="14" fill="url(#card)" stroke="#4f8fff"/><text x="16" y="27" fill="#7db4ff" font-size="13" font-weight="700">DAY 19</text><text x="16" y="51" fill="#fff" font-size="16" font-weight="600">Taints &amp; Tolerations</text></g>
+      <g transform="translate(4560 0)"><rect width="222" height="68" rx="14" fill="url(#card)" stroke="#4f8fff"/><text x="16" y="27" fill="#7db4ff" font-size="13" font-weight="700">DAY 20</text><text x="16" y="51" fill="#fff" font-size="16" font-weight="600">Volumes</text></g>
+      <g transform="translate(4800 0)"><rect width="222" height="68" rx="14" fill="url(#card)" stroke="#4f8fff"/><text x="16" y="27" fill="#7db4ff" font-size="13" font-weight="700">DAY 21</text><text x="16" y="51" fill="#fff" font-size="16" font-weight="600">PV &amp; PVC</text></g>
+      <g transform="translate(5040 0)"><rect width="222" height="68" rx="14" fill="url(#card)" stroke="#4f8fff"/><text x="16" y="27" fill="#7db4ff" font-size="13" font-weight="700">DAY 22</text><text x="16" y="51" fill="#fff" font-size="16" font-weight="600">StorageClasses</text></g>
+      <g transform="translate(5280 0)"><rect width="222" height="68" rx="14" fill="url(#card)" stroke="#4f8fff"/><text x="16" y="27" fill="#7db4ff" font-size="13" font-weight="700">DAY 23</text><text x="16" y="51" fill="#fff" font-size="16" font-weight="600">SecurityContext</text></g>
+      <g transform="translate(5520 0)"><rect width="222" height="68" rx="14" fill="url(#card)" stroke="#4f8fff"/><text x="16" y="27" fill="#7db4ff" font-size="13" font-weight="700">DAY 24</text><text x="16" y="51" fill="#fff" font-size="16" font-weight="600">ServiceAccounts</text></g>
+      <g transform="translate(5760 0)"><rect width="222" height="68" rx="14" fill="url(#card)" stroke="#4f8fff"/><text x="16" y="27" fill="#7db4ff" font-size="13" font-weight="700">DAY 25</text><text x="16" y="51" fill="#fff" font-size="16" font-weight="600">RBAC</text></g>
+      <g transform="translate(6000 0)"><rect width="222" height="68" rx="14" fill="url(#card)" stroke="#4f8fff"/><text x="16" y="27" fill="#7db4ff" font-size="13" font-weight="700">DAY 26</text><text x="16" y="51" fill="#fff" font-size="16" font-weight="600">NetworkPolicies</text></g>
+      <g transform="translate(6240 0)"><rect width="222" height="68" rx="14" fill="url(#card)" stroke="#4f8fff"/><text x="16" y="27" fill="#7db4ff" font-size="13" font-weight="700">DAY 27</text><text x="16" y="51" fill="#fff" font-size="16" font-weight="600">Image Security</text></g>
+      <g transform="translate(6480 0)"><rect width="222" height="68" rx="14" fill="url(#card)" stroke="#4f8fff"/><text x="16" y="27" fill="#7db4ff" font-size="13" font-weight="700">DAY 28</text><text x="16" y="51" fill="#fff" font-size="16" font-weight="600">Services</text></g>
+      <g transform="translate(6720 0)"><rect width="222" height="68" rx="14" fill="url(#card)" stroke="#4f8fff"/><text x="16" y="27" fill="#7db4ff" font-size="13" font-weight="700">DAY 29</text><text x="16" y="51" fill="#fff" font-size="16" font-weight="600">Ingress</text></g>
+      <g transform="translate(6960 0)"><rect width="222" height="68" rx="14" fill="url(#card)" stroke="#4f8fff"/><text x="16" y="27" fill="#7db4ff" font-size="13" font-weight="700">DAY 30</text><text x="16" y="51" fill="#fff" font-size="16" font-weight="600">Ingress Controllers</text></g>
+      <g transform="translate(7200 0)"><rect width="222" height="68" rx="14" fill="url(#card)" stroke="#4f8fff"/><text x="16" y="27" fill="#7db4ff" font-size="13" font-weight="700">DAY 31</text><text x="16" y="51" fill="#fff" font-size="16" font-weight="600">Cluster DNS</text></g>
+      <g transform="translate(7440 0)"><rect width="222" height="68" rx="14" fill="url(#card)" stroke="#4f8fff"/><text x="16" y="27" fill="#7db4ff" font-size="13" font-weight="700">DAY 32</text><text x="16" y="51" fill="#fff" font-size="16" font-weight="600">Health Probes</text></g>
+      <g transform="translate(7680 0)"><rect width="222" height="68" rx="14" fill="url(#card)" stroke="#4f8fff"/><text x="16" y="27" fill="#7db4ff" font-size="13" font-weight="700">DAY 33</text><text x="16" y="51" fill="#fff" font-size="16" font-weight="600">Logs</text></g>
+      <g transform="translate(7920 0)"><rect width="222" height="68" rx="14" fill="url(#card)" stroke="#4f8fff"/><text x="16" y="27" fill="#7db4ff" font-size="13" font-weight="700">DAY 34</text><text x="16" y="51" fill="#fff" font-size="16" font-weight="600">Debug Toolkit</text></g>
+      <g transform="translate(8160 0)"><rect width="222" height="68" rx="14" fill="url(#card)" stroke="#4f8fff"/><text x="16" y="27" fill="#7db4ff" font-size="13" font-weight="700">DAY 35</text><text x="16" y="51" fill="#fff" font-size="16" font-weight="600">API Deprecations</text></g>
+      <g transform="translate(8400 0)"><rect width="222" height="68" rx="14" fill="url(#card)" stroke="#4f8fff"/><text x="16" y="27" fill="#7db4ff" font-size="13" font-weight="700">DAY 36</text><text x="16" y="51" fill="#fff" font-size="16" font-weight="600">Pod Debugging</text></g>
+      <g transform="translate(8640 0)"><rect width="222" height="68" rx="14" fill="url(#card)" stroke="#4f8fff"/><text x="16" y="27" fill="#7db4ff" font-size="13" font-weight="700">DAY 37</text><text x="16" y="51" fill="#fff" font-size="16" font-weight="600">Helm Basics</text></g>
+      <g transform="translate(8880 0)"><rect width="222" height="68" rx="14" fill="url(#card)" stroke="#4f8fff"/><text x="16" y="27" fill="#7db4ff" font-size="13" font-weight="700">DAY 38</text><text x="16" y="51" fill="#fff" font-size="16" font-weight="600">Helm Upgrades</text></g>
+      <g transform="translate(9120 0)"><rect width="222" height="68" rx="14" fill="url(#card)" stroke="#4f8fff"/><text x="16" y="27" fill="#7db4ff" font-size="13" font-weight="700">DAY 39</text><text x="16" y="51" fill="#fff" font-size="16" font-weight="600">StatefulSets</text></g>
+      <g transform="translate(9360 0)"><rect width="222" height="68" rx="14" fill="url(#card)" stroke="#4f8fff"/><text x="16" y="27" fill="#7db4ff" font-size="13" font-weight="700">DAY 40</text><text x="16" y="51" fill="#fff" font-size="16" font-weight="600">DaemonSets</text></g>
+      <g transform="translate(9600 0)"><rect width="222" height="68" rx="14" fill="url(#card)" stroke="#4f8fff"/><text x="16" y="27" fill="#7db4ff" font-size="13" font-weight="700">DAY 41</text><text x="16" y="51" fill="#fff" font-size="16" font-weight="600">HPA &amp; VPA</text></g>
+    </g>
+  </defs>
+
+  <rect width="1000" height="132" rx="18" fill="url(#background)"/>
+  <circle cx="27" cy="25" r="6" fill="#326ce5" filter="url(#glow)">
+    <animate attributeName="opacity" values=".45;1;.45" dur="2s" repeatCount="indefinite"/>
+  </circle>
+  <text x="42" y="30" fill="#d9e8ff" font-family="Segoe UI, Arial, sans-serif" font-size="14" font-weight="700" letter-spacing="1">YOUR 41-DAY KUBERNETES JOURNEY</text>
+  <text x="965" y="30" text-anchor="end" fill="#7db4ff" font-family="Segoe UI, Arial, sans-serif" font-size="12">KEEP LEARNING →</text>
+
+  <g transform="translate(0 48)">
+    <g>
+      <use href="#track" x="0"/>
+      <use href="#track" x="9840"/>
+      <animateTransform attributeName="transform" type="translate" from="0 0" to="-9840 0" dur="82s" repeatCount="indefinite"/>
+    </g>
+  </g>
+
+  <rect x="0" y="45" width="70" height="76" fill="url(#fade-left)"/>
+  <rect x="930" y="45" width="70" height="76" fill="url(#fade-right)"/>
+</svg>

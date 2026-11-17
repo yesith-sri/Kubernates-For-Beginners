@@ -4,6 +4,10 @@
 
 ### Learn Kubernetes from zero to real-world concepts — one practical day at a time
 
+<a href="#-41-day-learning-roadmap">
+  <img src=".github/assets/learning-roadmap.svg" alt="Animated 41-day Kubernetes learning roadmap" width="100%" />
+</a>
+
 [![Kubernetes](https://img.shields.io/badge/Kubernetes-Learning_Path-326CE5?style=for-the-badge&logo=kubernetes&logoColor=white)](https://kubernetes.io/)
 [![Lessons](https://img.shields.io/badge/Lessons-41-22C55E?style=for-the-badge)](#-41-day-learning-roadmap)
 [![Level](https://img.shields.io/badge/Level-Beginner_to_Intermediate-F59E0B?style=for-the-badge)](#-what-you-will-learn)
