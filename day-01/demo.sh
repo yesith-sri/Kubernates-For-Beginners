@@ -11,3 +11,11 @@ kubectl get pods
 
 # Step 3: Describe my-pod — IP, node, container details, events
 kubectl describe pod my-pod
+
+# Step 4: Behind the scenes — The Pause Container
+# The pause container holds the Pod's IP and network namespace.
+# It is hidden from kubectl, but running directly on the worker node.
+# To see it on the worker node (via SSH / node terminal):
+#   crictl ps | grep pause
+#   or
+#   docker ps | grep pause

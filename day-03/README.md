@@ -6,7 +6,7 @@ Understand when multiple containers belong in one Pod and how they communicate.
 
 ## How Multi-Container Pods Work
 
-A Pod can run more than one container. Every container in that Pod is scheduled onto the same node and shares the Pod's network namespace. This means the containers share one Pod IP and can reach each other through `localhost` on different ports.
+A Pod can run more than one container. Every container in that Pod is scheduled onto the same node and shares the Pod's network namespace. This means the containers share one Pod IP and can reach each other through `localhost` on different ports. (Under the hood, this shared network namespace is created and held by the hidden pause container introduced in Day 01).
 
 Containers can also share data by mounting the same volume. They still have separate container images and filesystems unless a shared volume is configured.
 
