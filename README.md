@@ -9,10 +9,10 @@
 </a>
 
 [![Kubernetes](https://img.shields.io/badge/Kubernetes-Learning_Path-326CE5?style=for-the-badge&logo=kubernetes&logoColor=white)](https://kubernetes.io/)
-[![Lessons](https://img.shields.io/badge/Lessons-41-22C55E?style=for-the-badge)](#-41-day-learning-roadmap)
+[![Lessons](https://img.shields.io/badge/Lessons-43-22C55E?style=for-the-badge)](#-41-day-learning-roadmap)
 [![Level](https://img.shields.io/badge/Level-Beginner_to_Intermediate-F59E0B?style=for-the-badge)](#-what-you-will-learn)
 
-**41 hands-on lessons · Real YAML manifests · Ready-to-run demos**
+**43 hands-on lessons · Real YAML manifests · Ready-to-run demos**
 
 [Start Learning](#-quick-start) · [View Roadmap](#-41-day-learning-roadmap) · [Connect](#-connect)
 
@@ -173,7 +173,7 @@ bash demo.sh
 </details>
 
 <details>
-<summary><strong>Phase 6 — Real-World Kubernetes (Days 36–41)</strong></summary>
+<summary><strong>Phase 6 — Real-World Kubernetes & Cloud (Days 36–43)</strong></summary>
 
 - [Day 36 — Debugging broken Pods](./day-36)
 - [Day 37 — Introduction to Helm](./day-37)
@@ -181,6 +181,8 @@ bash demo.sh
 - [Day 39 — StatefulSets vs Deployments](./day-39)
 - [Day 40 — DaemonSets](./day-40)
 - [Day 41 — Resource optimization with HPA and VPA concepts](./day-41)
+- [Day 42 — Capstone Project: Microservices Voting App](./day-42)
+- [Day 43 — Kubernetes in the Cloud: Managed Services & Providers Guide](./day-43)
 
 </details>
 
