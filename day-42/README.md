@@ -1,18 +1,16 @@
-# Day 42 — Capstone Real-World Project: Microservices Voting App
+# Day 42 — Capstone Project: KodeKloud Microservices Voting App
 
 ## Overview
 
-Welcome to the **Capstone Real-World Project** of the Kubernetes Master Series! 
+This project is the official Kubernetes implementation of the industry-standard **Microservices Example Voting App** (from [kodekloudhub/example-voting-app](https://github.com/kodekloudhub/example-voting-app/tree/master/k8s-specifications)).
 
-In Days 01 through 41, you learned every foundational concept individually — Pods, Deployments, ReplicaSets, ClusterIP, NodePort, Ingress, CoreDNS, Probes, Storage, Self-Healing, and Resource Management. 
-
-Today in **Day 42**, we put all 41 days of knowledge together into a complete, battle-tested, production-grade **Microservices Application: The Example Voting App**.
+It synthesizes everything learned from **Day 01 to Day 41** into an end-to-end, multi-tier cloud-native deployment.
 
 ---
 
 ## Architecture Diagram
 
-![Kubernetes Microservices Architecture](voting-app-architecture.svg)
+![Kubernetes Voting App Architecture](voting-app-architecture.svg)
 
 ```mermaid
 flowchart LR
@@ -23,34 +21,34 @@ flowchart LR
 
     subgraph K8s["☸️ Kubernetes Cluster"]
         subgraph Frontends["Frontend Services (NodePort)"]
-            VoteSVC["Service: voting-service\nType: NodePort (30004)\nPort: 80 ➔ TargetPort: 80"]
-            VotePod["Pod: voting-app\n(Python Flask)\nTargetPort: 80"]
+            VoteSVC["Service: vote-service\nType: NodePort (31000)\nPort: 8080 ➔ TargetPort: 80"]
+            VotePod["Pod: vote\n(Python Flask)\nTargetPort: 80"]
 
-            ResultSVC["Service: result-service\nType: NodePort (30005)\nPort: 80 ➔ TargetPort: 80"]
-            ResultPod["Pod: result-app\n(Node.js)\nTargetPort: 80"]
+            ResultSVC["Service: result-service\nType: NodePort (31001)\nPort: 8081 ➔ TargetPort: 80"]
+            ResultPod["Pod: result\n(Node.js UI)\nTargetPort: 80"]
         end
 
         subgraph InQueue["Queue Layer (ClusterIP)"]
-            RedisSVC["Service: redis\nType: ClusterIP\nPort: 6379 ➔ TargetPort: 6379"]
-            RedisPod["Pod: redis\n(In-Memory Queue)"]
+            RedisSVC["Service: redis-service\nType: ClusterIP (redis)\nPort: 6379 ➔ TargetPort: 6379"]
+            RedisPod["Pod: redis\n(In-Memory Queue)\nVolume: /data"]
         end
 
         subgraph Processing["Background Worker"]
-            WorkerPod["Pod: worker\n(.NET / Java)\nNo Service Needed"]
+            WorkerPod["Pod: worker\n(.NET Daemon)\nNo Service Needed"]
         end
 
-        subgraph Database["Persistent Storage Layer (ClusterIP)"]
-            DBSVC["Service: db\nType: ClusterIP\nPort: 5432 ➔ TargetPort: 5432"]
-            DBPod["Pod: postgres\n(PostgreSQL Database)"]
+        subgraph Database["Persistent Database Layer (ClusterIP)"]
+            DBSVC["Service: db-service\nType: ClusterIP (db)\nPort: 5432 ➔ TargetPort: 5432"]
+            DBPod["Pod: db\n(PostgreSQL 15)\nVolume: /var/lib/.../data"]
         end
     end
 
-    Voters -->|http://node-ip:30004| VoteSVC --> VotePod
+    Voters -->|http://node-ip:31000| VoteSVC --> VotePod
     VotePod -->|writes votes to redis:6379| RedisSVC --> RedisPod
     WorkerPod -->|pulls votes from redis:6379| RedisSVC
-    WorkerPod -->|writes processed votes to db:5432| DBSVC --> DBPod
-    ResultPod -->|reads vote tallies from db:5432| DBSVC
-    Viewers -->|http://node-ip:30005| ResultSVC --> ResultPod
+    WorkerPod -->|writes aggregated votes to db:5432| DBSVC --> DBPod
+    ResultPod -->|reads tallies from db:5432| DBSVC
+    Viewers -->|http://node-ip:31001| ResultSVC --> ResultPod
 
     classDef k8s fill:#1e293b,stroke:#38bdf8,stroke-width:2px,color:#f8fafc;
     classDef svc fill:#1e1b4b,stroke:#818cf8,stroke-width:1.5px,color:#c7d2fe;
@@ -69,136 +67,152 @@ flowchart LR
 
 ---
 
-## The 5 Microservices Explained
+## 5-Step Implementation Guide
 
-| Microservice | Technology | Image | Service Type | Role & Data Flow |
-| :--- | :--- | :--- | :--- | :--- |
-| **`voting-app`** | Python (Flask) | `kodekloud/examplevotingapp_vote:v1` | **NodePort** (`30004`) | Presents the voting web UI (Cats vs Dogs). Sends submitted votes to Redis. |
-| **`redis`** | Redis (Alpine) | `redis:alpine` | **ClusterIP** (Port `6379`) | Fast in-memory buffer. Prevents DB bottleneck when thousands vote at once. |
-| **`worker`** | .NET / Java | `kodekloud/examplevotingapp_worker:v1` | **None** | Background daemon. Consumes votes from Redis, computes totals, writes to Postgres. |
-| **`postgres`** | PostgreSQL | `postgres:15-alpine` | **ClusterIP** (Port `5432`, Name: `db`) | Persistent relational database storing finalized vote tallies. |
-| **`result-app`** | Node.js | `kodekloud/examplevotingapp_result:v1` | **NodePort** (`30005`) | Live analytics dashboard. Reads totals from PostgreSQL and displays charts. |
+Deploy the system in order of internal dependencies: Data layers first, workers second, and external frontends last.
 
 ---
 
-## How Days 01–41 Concepts Apply to This Architecture
+### Step 1: In-Memory Queue (Redis)
+Redis holds raw incoming votes in RAM so the database is never overwhelmed by sudden traffic spikes.
 
-### 1. Networking: ClusterIP vs. NodePort (Day 28)
-- **Why Redis and Postgres use ClusterIP:**
-  Databases and message queues must **never** be exposed to the public internet. ClusterIP gives them internal-only IP addresses accessible only within the cluster.
-- **Why Voting-app and Result-app use NodePort:**
-  Users need to reach these web apps from their browsers outside the cluster. NodePort opens ports `30004` and `30005` on all cluster nodes.
+* **Deployment (`redis-deployment.yaml`):**
+  * Image: `redis:alpine`
+  * Container Port: `6379`
+  * Volume: `emptyDir: {}` mounted at `/data`
+* **Service (`redis-service.yaml`):**
+  * Type: `ClusterIP` (Internal only)
+  * Service Name: `redis` (must match name so `vote` can discover it via CoreDNS)
+  * Port: `6379` ➔ TargetPort: `6379`
 
-### 2. What `targetPort: 80` Means
-- `nodePort: 30004` ➔ The port on the worker node exposed to users (`http://node-ip:30004`).
-- `port: 80` ➔ The internal port of the Kubernetes Service.
-- `targetPort: 80` ➔ **The actual port inside the container** where the Python Flask or Node.js web server is listening.
-
-### 3. CoreDNS Service Discovery (Day 31)
-- The Python voting app connects to Redis using the hostname `redis`.
-- The worker app and result app connect to PostgreSQL using the hostname `db`.
-- **Zero hardcoded IPs!** CoreDNS automatically translates `redis` ➔ `redis.default.svc.cluster.local` and `db` ➔ `db.default.svc.cluster.local`.
-
-### 4. Self-Healing Mechanism (Day 11)
-- If the Redis Pod or PostgreSQL Pod crashes or runs out of memory (OOMKilled), the Deployment immediately detects `Actual Replicas (0) < Desired Replicas (1)` and spawns a fresh replacement Pod in seconds without manual intervention.
-
-### 5. Resource Requests and Limits (Day 09)
-- Every Deployment in this project defines explicit CPU and memory `requests` and `limits`, preventing any single microservice from starving the node.
+```bash
+kubectl apply -f redis-deployment.yaml
+kubectl apply -f redis-service.yaml
+```
 
 ---
 
-## Step-by-Step Deployment Guide
+### Step 2: Relational Database (PostgreSQL)
+PostgreSQL permanently stores the aggregated vote count.
 
-You can deploy the entire application using the provided automated script or manually:
+* **Deployment (`db-deployment.yaml`):**
+  * Image: `postgres:15-alpine`
+  * Container Port: `5432`
+  * Environment: `POSTGRES_USER=postgres`, `POSTGRES_PASSWORD=postgres`
+  * Volume: `emptyDir: {}` mounted at `/var/lib/postgresql/data`
+* **Service (`db-service.yaml`):**
+  * Type: `ClusterIP` (Internal only)
+  * Service Name: `db` (critical: `worker` and `result` connect to host `db`)
+  * Port: `5432` ➔ TargetPort: `5432`
 
-### Option A: Automated Script
+```bash
+kubectl apply -f db-deployment.yaml
+kubectl apply -f db-service.yaml
+```
+
+---
+
+### Step 3: Background Worker (.NET)
+The worker consumes votes from Redis, processes them, and writes the tallies into PostgreSQL.
+
+* **Deployment (`worker-deployment.yaml`):**
+  * Image: `dockersamples/examplevotingapp_worker`
+  * Label: `app: worker`
+* **Service:**
+  * **None needed!** The worker acts purely as a client — it makes outgoing connections to `redis` and `db`. Nothing calls the worker directly.
+
+```bash
+kubectl apply -f worker-deployment.yaml
+```
+
+---
+
+### Step 4: Voting App (Python Frontend)
+The public-facing web UI where users choose between Cats and Dogs.
+
+* **Deployment (`vote-deployment.yaml`):**
+  * Image: `dockersamples/examplevotingapp_vote`
+  * Container Port: `80` (Python Flask listens on port 80)
+* **Service (`vote-service.yaml`):**
+  * Type: `NodePort`
+  * NodePort: `31000` (User browser port)
+  * Port: `8080` (Service port)
+  * TargetPort: `80` (Container port)
+
+```bash
+kubectl apply -f vote-deployment.yaml
+kubectl apply -f vote-service.yaml
+```
+
+---
+
+### Step 5: Result App (Node.js Frontend)
+The public-facing analytics UI showing real-time vote percentages.
+
+* **Deployment (`result-deployment.yaml`):**
+  * Image: `dockersamples/examplevotingapp_result`
+  * Container Port: `80`
+* **Service (`result-service.yaml`):**
+  * Type: `NodePort`
+  * NodePort: `31001` (User browser port)
+  * Port: `8081` (Service port)
+  * TargetPort: `80` (Container port)
+
+```bash
+kubectl apply -f result-deployment.yaml
+kubectl apply -f result-service.yaml
+```
+
+---
+
+## One-Click Deployment Script
+
+To deploy and verify all 5 microservices automatically:
+
 ```bash
 cd day-42
 chmod +x demo.sh
 ./demo.sh
 ```
 
-### Option B: Manual Step-by-Step
-
-```bash
-# 1. Deploy Redis in-memory queue
-kubectl apply -f redis.yaml
-
-# 2. Deploy PostgreSQL database
-kubectl apply -f postgres.yaml
-
-# 3. Deploy Background Worker
-kubectl apply -f worker.yaml
-
-# 4. Deploy Voting Web App
-kubectl apply -f voting-app.yaml
-
-# 5. Deploy Result Analytics App
-kubectl apply -f result-app.yaml
-```
-
-### Verify Deployment Status
-```bash
-# Check all Pods and Deployments
-kubectl get deployments
-kubectl get pods -o wide
-
-# Check Services and Port mappings
-kubectl get services
-```
-
 ---
 
-## Accessing the Application
+## Port Mapping Reference
 
-Once all Pods are in the `Running` state:
-
-1. **Cast a Vote:**
-   Open your browser to: `http://<NODE-IP>:30004`
-2. **View Live Results:**
-   Open your browser to: `http://<NODE-IP>:30005`
-
-> **Minikube Users:**
-> ```bash
-> minikube service voting-service --url
-> minikube service result-service --url
-> ```
+| Microservice | Internal Container Port (`targetPort`) | Service Port (`port`) | Node Port (`nodePort`) | Access URL |
+| :--- | :--- | :--- | :--- | :--- |
+| **`vote`** | `80` | `8080` | **`31000`** | `http://<NODE-IP>:31000` |
+| **`result`** | `80` | `8081` | **`31001`** | `http://<NODE-IP>:31001` |
+| **`redis`** | `6379` | `6379` | *None (ClusterIP)* | `redis:6379` (Internal) |
+| **`db`** | `5432` | `5432` | *None (ClusterIP)* | `db:5432` (Internal) |
+| **`worker`** | *N/A* | *N/A* | *None* | *Background worker* |
 
 ---
 
 ## Clean Up
 
-To remove all resources created by this project:
+To delete all resources created in this project:
 
 ```bash
-kubectl delete -f voting-app.yaml
-kubectl delete -f result-app.yaml
-kubectl delete -f worker.yaml
-kubectl delete -f redis.yaml
-kubectl delete -f postgres.yaml
+kubectl delete -f vote-service.yaml,vote-deployment.yaml
+kubectl delete -f result-service.yaml,result-deployment.yaml
+kubectl delete -f worker-deployment.yaml
+kubectl delete -f redis-service.yaml,redis-deployment.yaml
+kubectl delete -f db-service.yaml,db-deployment.yaml
 ```
 
 ---
 
-## Key Interview Questions
-
-**Q1: In the Voting App, why does the PostgreSQL service need to be named specifically `db`?**
-> **Answer:** Because the `worker` application and `result-app` have the connection string configured with host `db`. Kubernetes CoreDNS uses the Service name as the DNS host, so naming the Service `db` allows automatic resolution without modifying application code or passing custom environment variables.
-
-**Q2: Why does the background `worker` microservice not require a Kubernetes Service?**
-> **Answer:** A Service is only required when other components need to initiate network connections *to* the Pod. The worker acts purely as a consumer (client): it initiates outgoing connections to pull from Redis and push to PostgreSQL. Since no component calls the worker directly, no Service is needed.
-
-**Q3: Why is Redis placed in front of PostgreSQL instead of having the voting app write directly to PostgreSQL?**
-> **Answer:** Traffic decoupling and queue buffering. Under sudden high spikes of voting traffic, direct database writes would overwhelm PostgreSQL connections and disk I/O, leading to database lockups. Redis handles thousands of in-memory writes per second with sub-millisecond latency, while the worker smoothly drains the queue at a sustainable pace for PostgreSQL.
-
----
-
-## Files in this Project
+## Files in this Directory
 
 - `voting-app-architecture.svg` — Vector architecture diagram
-- `voting-app.yaml` — Deployment & NodePort Service for Python voting frontend
-- `redis.yaml` — Deployment & ClusterIP Service for Redis queue
-- `worker.yaml` — Deployment for .NET background processing worker
-- `postgres.yaml` — Deployment & ClusterIP Service for PostgreSQL database
-- `result-app.yaml` — Deployment & NodePort Service for Node.js results frontend
-- `demo.sh` — Bash script to deploy, verify, and launch the entire application
+- `redis-deployment.yaml` — Redis queue Deployment
+- `redis-service.yaml` — Redis ClusterIP Service
+- `db-deployment.yaml` — PostgreSQL database Deployment
+- `db-service.yaml` — PostgreSQL ClusterIP Service (`db`)
+- `worker-deployment.yaml` — .NET background processing worker Deployment
+- `vote-deployment.yaml` — Python voting web app Deployment
+- `vote-service.yaml` — Python voting NodePort Service (`31000`)
+- `result-deployment.yaml` — Node.js results dashboard Deployment
+- `result-service.yaml` — Node.js results NodePort Service (`31001`)
+- `demo.sh` — Automated deployment and verification bash script
