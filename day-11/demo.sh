@@ -20,3 +20,13 @@ kubectl get replicasets
 # 3 Pods created by the ReplicaSet
 # One Deployment -> One ReplicaSet -> Three Pods
 kubectl get pods
+
+# Step 6: Test Self-Healing — Delete one Pod and watch it recover instantly
+# We intentionally delete one Pod to simulate a crash or accidental deletion:
+echo "Deleting one Pod to test self-healing..."
+POD_NAME=$(kubectl get pods -l app=my-app -o jsonpath="{.items[0].metadata.name}")
+kubectl delete pod $POD_NAME
+
+# The ReplicaSet immediately detects that 2 < 3 and creates a new Pod:
+echo "Checking Pods immediately after deletion — notice the new Pod with low age:"
+kubectl get pods

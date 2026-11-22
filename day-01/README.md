@@ -67,7 +67,7 @@ When Kubernetes creates a Pod, it does not start your application container firs
 
 ## Common Beginner Mistake
 
-Do not treat a standalone Pod as a production deployment. A bare Pod is useful for learning, testing, and debugging, but a Deployment is normally used to recreate failed Pods automatically.
+Do not treat a standalone Pod as a production deployment. A bare Pod is useful for learning, testing, and debugging, but a Deployment is normally used in production because it provides a **self-healing mechanism** (automatically recreating failed or deleted Pods).
 
 ## Key Takeaway
 
